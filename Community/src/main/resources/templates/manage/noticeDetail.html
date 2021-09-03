@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Post Detail Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/5/minty/bootstrap.css">
+	<link rel="stylesheet" href="/_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="/_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="/_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/_vendor/prismjs/prism.js" data-manual></script>
+	<script src="/_assets/js/custom.js"></script>
+	
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			$(window).load(function () {
+				var msg = [[${msg}]];
+				if (msg == 'updated') {
+					alert("게시글 수정 완료");
+					var stateObj = {msg: ""};
+				} else if (msg == 'up') {
+					alert("게시글을 추천했습니다!");
+					var stateObj = {msg: ""};
+				} else if (msg == 'upfail') {
+					alert("게시글을 추천하려면 로그인 해주세요.");
+					var stateObj = {msg: ""};
+				} else if (msg == 'comment') {
+					alert("댓글 작성 완료");
+					var stateObj = {msg: ""};
+				}
+			});
+		</script>
+	</th:block>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+
+	<br><br>
+	<h3 style="text-align: center;">공지사항</h3>
+	<br><br><br>
+
+	<!-- 본문 -->
+	<div class="h-100">
+		<!-- 게시판부분 -->
+		<div class="container" style="float: center;  width: 60%;">
+			<h3 style="text-align: center;" th:text="${notice.title}"></h3>
+			<hr><br>
+			<div class="row">
+				<div class="col-lg-6">
+					작성일 : <span th:text="${#calendars.format(notice.postdate, 'yyyy-MM-dd HH:mm')}"></span><br>
+					수정일 : <sapn th:text="${#calendars.format(notice.updatedate, 'yyyy-MM-dd HH:mm')}"></sapn>
+				</div>
+				<div class="col-lg-6" style="text-align: right;">
+					<br><br>
+					조회 : <span th:text="${notice.hit}"/>
+				</div>		
+			</div><br>
+					
+			<textarea th:text="${notice.content}" readonly
+			style="resize: none; height: 300px; width: 100%;"></textarea>
+			<div class="row">
+				<div class="col-lg-9">
+					<a th:href="@{/manage/noticeList}"
+					role="button" class="btn btn-primary">목록으로</a>
+				</div>
+				<div class="col-lg-3" style="text-align: right;" th:if="${session.userid == notice.member?.userid}">
+				<!-- th:action 수정됨 -->
+					<form id="update-form" method="post"
+					th:action="@{'/noticeUpdate/' + ${notice.nno}}">
+						<a th:href="@{'/manage/noticeUpdate/' + ${notice.nno}}"
+						role="button" class="btn btn-warning" style="width: 40%;">
+							수정
+						</a>
+						<a th:href="@{'/noticeDelete/' + ${notice.nno}}" 
+						onclick="return confirm('정말 삭제하시겠습니까?');"
+						class="btn btn-danger" style="width: 40%;">
+							삭제
+						</a>
+						<!--
+						<button id="delete-btn2" type="button" th:href="@{'/noticeDelete' + ${notice.nno}}"
+						class="btn btn-danger" style="width: 40%;">
+			                삭제
+			            </button>-->
+						<!--
+						<form id="delete-form" method="post" 
+						th:action="@{'/noticeDelete/' + ${notice.nno}}"
+						onsubmit="return confirm('정말 삭제하시겠습니까?');" >
+			                <input type="hidden" name="_method" value="delete"/>
+			                <button id="delete-btn2" type="submit"
+			                class="btn btn-danger" style="width: 40%;">
+			                	삭제
+			                </button>
+		           		</form>-->
+					</form>
+				</div>
+			</div><br><br>
+		</div>
+	</div><br><br><br><br><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

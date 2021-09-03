@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Update Gallery</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../5/minty/bootstrap.css">
+	<link rel="stylesheet" href="../_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="../_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="../_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="../_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../_vendor/prismjs/prism.js" data-manual></script>
+	<script src="../_assets/js/custom.js"></script>
+	
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			$(window).load(function () {
+				var msg = [[${msg}]];
+				if(msg == 'nogm') {
+					alert('신청인이 검색되지 않습니다. ID를 확인해주세요.');
+					var stateObj = { msg: "" };
+				} else if (msg == 'overlap') {
+					alert('중복된 갤러리명입니다.');
+					var stateObj = { msg: "" };
+				}
+				
+				if(![[${gal.master?.userid}]]) {//alert("galmaster is undefined");
+					//$("#galmasterip").attr("readonly",false);
+				} else {//alert("galmaster has value");
+					document.getElementById('galmaster').value = 'admin';
+					//$("#galmasterip").attr("readonly",true);
+				}
+			});
+		</script>
+	</th:block>
+	<script>
+		function fn_value_chk() {
+			var message = "다음 입력 값으로 게시판을 수정합니다.";
+			message += "\n카테고리: " + document.getElementById('category').value;
+			message += "\n갤러리명: " + document.getElementById("galname").value;
+			message += "\n마스터: " + document.getElementById('galmaster').value;
+			
+			return confirm(message);
+		}
+	</script>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+	<br><br>
+
+	<!-- 본문 -->
+	<div class="h-100">
+		<div class="container" style="float: center;  width: 60%;">
+			<h3 style="text-align: center;">카테고리 및 갤러리 수정</h3>
+			<form method="post" th:action="'/galleryUpdate/'+${gal.galname}" onsubmit="return fn_value_chk()">
+				<div class="form-group row">
+					<div class="form-group">
+						<label for="categorySelect" class="form-label mt-4">
+							카테고리
+						</label>
+						<!--
+						<input type="text" class="form-control"
+						 name="category" id="category" placeholder="카테고리를 입력하세요" th:value="${gal.category}" required>
+						-->
+						<select class="form-select" name="category" id="category">
+							<option th:each="category : ${category}" th:if="${category != null}"
+							th:text="${category}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control"
+						 name="galname" id="galname" placeholder="갤러리명을 입력하세요" th:value="${gal.galname}" required>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" name="galmasterip" id="galmasterip"
+						 placeholder="갤러리 마스터(신청인)" th:value="${gal.master?.userid}" required>
+					</div>
+
+					<div class="form-group">
+						<input type="submit" class="form-control" value="수정">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Notice Update Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/5/minty/bootstrap.css">
+	<link rel="stylesheet" href="/_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="/_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="/_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/_vendor/prismjs/prism.js" data-manual></script>
+	<script src="/_assets/js/custom.js"></script>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+	
+	<br><br>
+	<h3 style="text-align: center;">공지사항 수정</h3>
+	<br><br><br>
+
+	<!-- 본문 -->
+	<div class="h-100">
+		<!-- 광고부분 -->
+		<div style="float: left; width: 10%; margin-left: 2%;">
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+		</div>
+		<div style="float: right; width: 10%; margin-right: 2%;">
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+		</div>
+
+		<!-- 게시판부분 -->
+		<div class="container" style="float: center;  width: 60%;">
+			<h3 style="text-align: center;">글수정</h3>
+			<form method="post" action="/noticeUpdate">
+				<div class="form-group row">
+					<!-- 필요한 글번호, userid 숨김 -->
+					<input name="nno" th:value="${notice.nno}" hidden>
+					<input type="text" name="userid" th:value="${session.userid}" hidden>
+
+					<!-- 수정폼 영역 -->
+					<div class="form-group">
+						<label class="col-form-label mt-4" for="title">제목</label>
+						<input type="text" class="form-control" name="title" 
+						th:value="${notice.title}" required>
+					</div>
+
+					<div class="form-group">
+						<label for="content" class="form-label mt-4">내용</label>
+						<textarea class="form-control" name="content"
+						rows="10" th:text="${notice.content}" required></textarea>
+					</div>
+
+					<div class="form-group" style="margin-top: 10px; text-align: right;">
+						<button type="submit" class="btn btn-warning" style="width: 10%;">
+							수정
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+	
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>PostDetail Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/5/minty/bootstrap.css">
+	<link rel="stylesheet" href="/_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="/_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="/_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/_vendor/prismjs/prism.js" data-manual></script>
+	<script src="/_assets/js/custom.js"></script>
+
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			$(window).load(function () {
+				var msg = [[${msg}]];
+				if (msg == 'updated') {
+					alert("게시글 수정 완료");
+					var stateObj = {msg: ""};
+				} else if (msg == 'up') {
+					alert("게시글을 추천했습니다!");
+					var stateObj = {msg: ""};
+				} else if (msg == 'upfail') {
+					alert("게시글을 추천하려면 로그인 해주세요.");
+					var stateObj = {msg: ""};
+				} else if (msg == 'comment') {
+					alert("댓글 작성 완료");
+					var stateObj = {msg: ""};
+				}
+			});
+
+			function fn_comment_submit() {
+				if ([[${session.userid}]] != null) {
+					return true;
+				}
+				alert("댓글을 작성하려면 로그인 해주세요.");
+				return false;
+			}
+
+			function view(cno) {
+				var viewDiv = document.getElementsByClassName("view" + cno);
+				var updateDiv = document.getElementsByClassName("update" + cno);
+
+				if (viewDiv[0].style.display == "block") {
+					viewDiv[0].style.display = "none"
+					viewDiv[1].style.display = "none"
+					updateDiv[0].style.display = "block"
+					updateDiv[1].style.display = "block"
+				}
+			}	
+		</script>
+	</th:block>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+
+	<br><br>
+	<h3 style="text-align: center;"><span th:text="${post.gallery?.galname}"> 갤러리</h3>
+	<br><br><br>
+
+	<!-- 본문 -->
+	<div class="h-100">
+		<!-- 게시판부분 -->
+		<div class="container" style="float: center;  width: 60%;">
+			<h3 style="text-align: center;" th:text="${post.title}"></h3>
+			<hr><br>
+			<div class="row">
+				<div class="col-lg-6">
+					작성자 : <span th:text="${post.member?.userid}"></span><br>
+					작성일 : <span th:text="${#calendars.format(post.postdate, 'yyyy-MM-dd HH:mm')}"></span><br>
+					수정일 : <sapn th:text="${#calendars.format(post.updatedate, 'yyyy-MM-dd HH:mm')}"></sapn>
+				</div>
+				<div class="col-lg-6" style="text-align: right;">
+					<br><br>
+					조회 : <span th:text="${post.hit}"/>
+					<!-- 추천 : <span th:text="${post.up}"/> -->
+				</div>		
+			</div><br>
+					
+			<textarea th:text="${post.content}" readonly
+			style="resize: none; height: 300px; width: 100%;"></textarea>
+			<div class="row">
+				<div class="col-lg-9">
+					<a th:href="@{/gallery/list(galname=${post.gallery.galname})}"
+					role="button" class="btn btn-primary">목록으로</a>
+					<a th:href="@{'/gallery/up/' + ${post.pno}}" role="button" class="btn btn-info" hidden>추천</a>
+				</div>
+				<div class="col-lg-3" style="text-align: right;">
+				<!-- th:action 수정됨 -->
+					<form id="update-form" method="post"
+					th:action="@{'/gallery/' + ${post.pno} + '/' + ${post.gallery.galname}}">
+						<a th:href="@{'/gallery/updatePosts/' + ${post.pno}}"
+						th:if="${session.userid == post.member.userid}"
+						role="button" class="btn btn-warning" style="width: 40%;">
+							수정
+						</a>
+						<form id="delete-form" method="post"
+						th:if="${session.type == 'ADMIN'} or ${session.userid == post.member.userid}"
+						th:action="@{'/gallery/' + ${post.pno} + '/' + ${post.gallery.galname}}">
+			                <input type="hidden" name="_method" value="delete"/>
+			                <button id="delete-btn2" type="submit" onclick="return confirm('정말 삭제하시겠습니까?');"
+			                class="btn btn-danger" style="width: 40%;">
+			                	삭제
+			                </button>
+		                </form>
+	           		</form>
+				</div>
+			</div><br><br>
+			
+			<!-- 댓글 -->
+			<div style="border-bottom: 2px solid; border-top: 2px solid; padding-bottom: 5px;">
+				<form method="post" th:action="@{'/commentSub/' + ${post.pno}}" 
+				onsubmit="return fn_comment_submit()">
+					<div style="margin-bottom: 5px;">
+						<div class="form-group">
+							<label for="content" class="form-label mt-4">댓글</label>
+							<textarea class="form-control" name="content" rows="1"></textarea>
+						</div>
+					</div>
+					<div style="text-align: right;">
+						<button type="submit" class="btn btn-dark">등록</button>
+					</div>			
+				</form>
+			</div>
+			<div><br>
+				<div class="row" th:each="comments : ${commentList}">
+					<!--<th:block layout:fragment="script">
+						<script th:inline="javascript">
+							var viewDiv = document.getElementsByClassName("view[[${comments.cno}]]");
+							var updateDiv = document.getElementsByClassName("update[[${comments.cno}]]");
+						</script>
+					</th:block>-->
+					<div class="col-md-3">
+						작성자 : <span th:text="${comments.member}"></span><br>
+						작성일 : <span th:text="${#dates.format(comments.regdate, 'yyyy-MM-dd')}"></span>				
+					</div>
+					<div th:class="'col-md-8 view' + ${comments.cno}" style="display: block;">
+						<p th:text="${comments.content}">내용</p>
+					</div>
+					<div th:class="'col-md-1 view'+ ${comments.cno}" style="display: block;">
+						<!--<a th:text="수정" th:onclick="|javascript:view|"></a>-->
+						<a href="javascript:" th:text="수정" th:onclick="|javascript:view(${comments.cno})|"
+						th:if="${session.userid == comments.member}">수정</a>
+						<a th:href="@{'/commentDelete/' + ${post.pno} + '/' + ${comments.cno}}" 
+						onclick="return confirm('정말 삭제하시겠습니까?');"
+						th:if="${session.userid == comments.member || session.type == 'ADMIN'}">삭제</a>
+					</div>
+					
+					<!--@{'/commentUpdate/' + ${post.pno} + '/' + ${comments.cno}}-->
+					<form method="post" th:action="@{'/commentUpdate/' + ${post.pno} + '/' + ${comments.cno}}">
+						<div th:class="'update' + ${comments.cno}" style="display: none;">
+							<textarea class="form-control" name="content" rows="2"></textarea>
+						</div>
+						<div th:class="'update' + ${comments.cno}"
+						style="display: none; float: right;">
+							<button type="submit" class="btn-sm btn-info">완료</button>
+						</div>
+					</form><br><hr>
+				</div>
+			</div>
+		</div>
+	</div><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

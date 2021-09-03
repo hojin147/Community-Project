@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Notice List Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../5/minty/bootstrap.css">
+	<link rel="stylesheet" href="../_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="../_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="../_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="../_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../_vendor/prismjs/prism.js" data-manual></script>
+	<script src="../_assets/js/custom.js"></script>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+
+	<br><br>
+	
+	<div style="float: left; width: 9%; margin-left: 2%;">
+		<th:block th:replace="include/sideLeft"></th:block>
+	</div>
+	<div style="float: right; width: 9%; margin-right: 8%;">
+		<th:block th:replace="include/sideRight"></th:block>
+	</div>
+	
+	<h3 style="text-align: center;">공지사항</h3>
+	<br><br>
+
+	<!-- 본문 -->
+	
+
+	<div class="container" style="float: center; width: 65%">
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th scope="col">번호</th>
+					<th scope="col">제목</th>
+					<th scope="col">작성일</th>
+					<th scope="col">조회</th>
+				</tr>
+			</thead>
+			<tbody style="vertical-align: middle;">
+				<tr class="text-center" th:each="notice : ${noticeList}">
+					<td scope="row">
+						<span th:text="${notice.nno}" />
+					</td>
+					<td>
+						<a th:href="@{'/manage/noticeDetail/' + ${notice.nno} + '/' + ${session.userid}}">
+							<span th:text="${notice.title}" />
+						</a>
+					</td>
+					<td>
+						<span th:text="${#dates.format(notice.postdate, 'yyyy-MM-dd')}"/>
+		            </td>
+					<td>
+						<span th:text="${notice.hit}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		 <div class="row" th:if="${param.keyword != null}">
+	        <div class="col-lg-9">
+		        <!-- 페이징 처리 네비게이션 바 -->
+		        <div style="margin-right: 50px;">
+					<ul class="pagination">
+						<li class="page-item">
+	 						<a class="page-link" aria-label="Previous"
+	 						th:href="@{searchGal(type=${param.type}, galname=${galname}, keyword=${param.keyword}, page=1)}">
+								<span aria-hidden="true">처음</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" aria-label="Previous" 
+							th:href="@{searchGal(type=${param.type}, galname=${galname}, keyword=${param.keyword}, page = ${pagination.prevBlock})}">
+								<span aria-hidden="true">이전</span>
+							</a>
+						</li>
+						<th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+							<li class="page-item" th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+							th:each="pageButton : ${#numbers.sequence(start, end)}">
+								<a class="page-link" th:text=${pageButton} 
+								th:href="@{searchGal(type=${param.type}, galname=${galname}, keyword=${param.keyword}, page = ${pageButton})}"></a>
+							</li>
+						</th:block>
+						<li class="page-item">
+							<a class="page-link" aria-label="Next"
+							th:href="@{searchGal(type=${param.type}, galname=${galname}, keyword=${param.keyword}, page = ${pagination.nextBlock})}">
+								<span aria-hidden="true">다음</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" aria-label="Previous"
+							th:href="@{searchGal(type=${param.type}, galname=${galname}, keyword=${param.keyword}, page = ${pagination.totalPageCnt})}">
+								<span aria-hidden="true">끝</span>
+							</a>
+						</li>
+					</ul>
+		        </div>
+	        </div>
+	        <div class="col-lg-3" style="text-align: right;" th:if="${session.type == 'ADMIN'}">
+	        	<a class="btn btn-dark" th:href="@{'/gallery/writePost/' + ${galname}}">글쓰기</a>
+	        </div>
+	    </div>
+	    <div class="row" th:unless="${param.keyword != null}">
+	        <div class="col-lg-9">
+		        <!-- 페이징 처리 네비게이션 바 -->
+		        <div style="margin-right: 50px;">
+					<ul class="pagination">
+						<li class="page-item">
+	 						<a class="page-link" aria-label="Previous"
+	 						th:href="@{list(galname=${galname}, page=1)}">
+								<span aria-hidden="true">처음</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" aria-label="Previous" 
+							th:href="@{list(galname=${galname}, page = ${pagination.prevBlock})}">
+								<span aria-hidden="true">이전</span>
+							</a>
+						</li>
+						<th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+							<li class="page-item" th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+							th:each="pageButton : ${#numbers.sequence(start, end)}">
+								<a class="page-link" th:text=${pageButton} 
+								th:href="@{list(galname=${galname}, page = ${pageButton})}"></a>
+							</li>
+						</th:block>
+						<li class="page-item">
+							<a class="page-link" aria-label="Next"
+							th:href="@{list(galname=${galname}, page = ${pagination.nextBlock})}">
+								<span aria-hidden="true">다음</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" aria-label="Previous"
+							th:href="@{list(galname=${galname}, page = ${pagination.totalPageCnt})}">
+								<span aria-hidden="true">끝</span>
+							</a>
+						</li>
+					</ul>
+		        </div>
+	        </div>
+	        <div class="col-lg-3" style="text-align: right;" th:if="${session.type == 'ADMIN'}">
+	        	<a class="btn btn-dark" th:href="@{'/manage/noticeWrite'}">글쓰기</a>
+	        </div>
+	    </div>
+	    <form class="d-flex" action="/noticeSearch"
+	    style="width: 40%; float: right;" method="get">
+	    	<select  id='type' name='type'>
+				<option value='t' >제목</option>
+				<option value='c' >내용</option>
+				<option value='u' >작성자</option>
+			</select>&nbsp;
+			<input name="galname" th:value="${galname}" hidden>
+			<input id="keyword" name="keyword" class="form-control me-sm-2" 
+			type="text" placeholder="검색">&nbsp;
+			<button class="btn btn-secondary my-2 my-sm-0" type="submit"
+			style="vertical-align: middle;">Search</button>
+		</form>
+	</div><br><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+	</div>
+
+</body>
+</html>

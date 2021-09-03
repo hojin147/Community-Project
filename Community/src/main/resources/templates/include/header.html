@@ -1,0 +1,86 @@
+<header th:fragment="header">
+	<div class="navbar navbar-expand-lg top navbar-dark bg-primary">
+		<div class="container" style="height:90px;">
+			<a href="/main/index" class="navbar-brand">
+			<img src="/images/상단이미지.png" style="width:50px;">&nbsp;
+			<span style="font-size: xx-large; font-weight: bold; vertical-align: middle;">SP인사이드</span>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+			data-bs-target="#navbarColor01" aria-controls="navbarColor01"
+			aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<form class="d-flex" action="/gallery/searchList" method="GET">
+				<select id='type' name='type' style="width:20%;">
+					<option value='t' >제목</option>
+					<option value='c' >내용</option>
+					<option value='u' >작성자</option>
+				</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input id="keyword" name="keyword" class="form-control me-sm-2"
+				type="text" size="65" placeholder="통합검색">&nbsp;
+				<button class="btn btn-secondary my-2 my-sm-0" type="submit"
+				style="vertical-align: middle;">Search</button>
+			</form>
+
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav ms-md-auto" th:if="${session.type == null}">
+					<li class="nav-item">
+						<a href="/member/signUp" role="button" class="btn btn-light">
+							회원가입
+						</a>
+					</li>&nbsp;&nbsp;
+					<li class="nav-item">
+						<a href="/member/login" role="button" class="btn btn-light" style="margin-right: 10px;">
+							로그인
+						</a>
+					</li>
+				</ul>
+
+				<ul class="navbar-nav ms-md-auto" th:if="${session.type == 'USER'}">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+						aria-haspopup="true" aria-expanded="false" th:text="${session.userid}"></a>
+						<div class="dropdown-menu" data-popper-placement="bottom-start"
+						style="position: absolute; inset: 0px auto auto 0px;
+						margin: 0px; transform: translate(0px, 42px);">
+							<a class="dropdown-item" href="/member/myPostList">게시글관리</a>
+							<a class="dropdown-item" href="/member/myComment">내댓글관리</a>
+							<a class="dropdown-item" href="/member/memberPwUpdatePage">비밀번호변경</a>
+							<a class="dropdown-item" href="/member/memberUpdatePage">정보수정</a>
+							<a class="dropdown-item" href="/member/memberQuit">회원탈퇴</a>
+							<a class="dropdown-item" href="/logout">로그아웃</a>
+						</div>
+					</li>
+				</ul>
+
+				<ul class="navbar-nav ms-md-auto" th:if="${session.type == 'ADMIN'}">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+						aria-haspopup="true" aria-expanded="false" th:text="'관리자 | ' + ${session.userid}"></a>
+						<div class="dropdown-menu" style="position: absolute; inset: 0px auto auto 0px;
+							margin: 0px; transform: translate(0px, 42px);" data-popper-placement="bottom-start">
+							<a class="dropdown-item" href="/manage/memberList">회원관리</a>
+							<a class="dropdown-item" href="/manage/noticeList">공지사항관리</a>
+							<a class="dropdown-item" href="/manage/galleryList">갤러리관리</a>
+							<a class="dropdown-item" href="/logout">로그아웃</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- 로그아웃 -->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			$(window).load(function () {
+				var msg = [[${msg}]];
+				if (msg == 'logout') {
+					alert("로그아웃되었습니다.");
+					var stateObj = {msg: ""};
+				}
+			});
+		</script>
+	</th:block>
+</header>

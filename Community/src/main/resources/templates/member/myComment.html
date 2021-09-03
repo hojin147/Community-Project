@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>MyComment List Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../5/minty/bootstrap.css">
+	<link rel="stylesheet" href="../_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="../_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="../_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="../_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../_vendor/prismjs/prism.js" data-manual></script>
+	<script src="../_assets/js/custom.js"></script>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+
+	<br><br>
+	<h3 style="text-align: center;" th:text="|${session.userid}님의 댓글|"/>
+	<br><br>
+
+	<!-- 본문 -->
+	<div style="float: left; width: 10%; margin-left: 2%; visibility: hidden;">
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+	</div>
+	<div style="float: right; width: 10%; margin-right: 2%; visibility: hidden;">
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+	</div>
+
+	<div class="container" style="float: center; width: 70%">
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th scope="col">번호</th>
+					<th scope="col">갤러리</th>
+					<th scope="col">내용</th>
+					<th scope="col">작성일</th>
+				</tr>
+			</thead>
+			<tbody style="vertical-align: middle;">
+				<tr class="text-center" th:each="comment : ${myCommentList}">
+					<td scope="row">
+						<span th:text="${comment.cno}" />
+					</td>
+					<td>
+						<span th:text="${comment.post.gallery.galname}" />
+					</td>
+					<td>
+						<a th:text="${comment.content}"
+						   th:href="@{'/gallery/postDetail/' + ${comment.post.pno} + '/' + ${session.userid}}"></a>
+					</td>
+					<td>
+						<span th:text="${#dates.format(comment.regdate, 'yyyy-MM-dd')}"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div>
+			<!-- 페이징 처리 네비게이션 바 -->
+			<div style="margin-right: 50px;">
+				<ul class="pagination">
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{myComment(page=1)}">
+							<span aria-hidden="true">처음</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{myComment(page = ${pagination.prevBlock})}">
+							<span aria-hidden="true">이전</span>
+						</a>
+					</li>
+					<th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+						<li class="page-item" th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+						th:each="pageButton : ${#numbers.sequence(start, end)}">
+							<a class="page-link" th:text=${pageButton} 
+							th:href="@{myComment(page = ${pageButton})}"></a>
+						</li>
+					</th:block>
+					<li class="page-item">
+						<a class="page-link" aria-label="Next"
+						th:href="@{myComment(page = ${pagination.nextBlock})}">
+							<span aria-hidden="true">다음</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{myComment(page = ${pagination.totalPageCnt})}">
+							<span aria-hidden="true">끝</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

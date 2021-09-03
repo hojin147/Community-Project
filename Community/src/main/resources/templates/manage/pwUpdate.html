@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Password Update(manage)</title>
+	<meta name="viewport" charset="UTF-8"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../css/join-font.css">
+	<link rel="stylesheet" href="../css/join.css">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/joinpopper.js"></script>
+	<script src="../js/joinbootstrap.js"></script>
+	<script src="../js/joinmain.js"></script>
+	<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+	data-cf-beacon='{"rayId":"67ff36bd6adf35df","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2021.8.0","si":10}'>
+	</script>
+
+	<script>
+		let pwCheck = 0;
+		var uid;
+		var oldpw;
+		
+		//비밀번호 수정 버튼 누를 때 각 입력값이 이상이 없는지 최종 확인
+		function fn_submit_form() {
+			if($("#pwchk").val() == $("#newpw").val()) {
+				$("#pwchk").attr('class','form-control');
+				$("#newpw").attr('class','form-control');
+				pwCheck = 1;
+			} else {
+				$("#pwchk").attr('class','form-control is-invalid');
+				$("#newpw").attr('class','form-control is-invalid');
+				pwCheck = 0;
+			}
+			
+			if(pwCheck == 0) {
+				alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+				return false;
+			} else if($("#pw").val() != oldpw) {
+				alert("기존 비밀번호를 잘못 입력 했습니다.");
+				return false;
+			} else if($("#newpw").val() == oldpw || $("#pwchk").val() == oldpw) {
+				alert("기존 비밀번호와 같은 비밀번호로 변경할 수 없습니다.");
+				return false;
+			} else {
+				alert("비밀번호 변경 성공");
+				return true;
+			}
+		}
+	</script>
+	
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			//id체크 결과값 받아서 알림창
+			$(window).load(function () {
+				document.getElementById("userid").value = [[${member.userid}]];
+				oldpw = [[${member.pw}]];
+				
+			});
+			
+			//동기확인 기능
+			$(document).ready(function() {
+				$("#pwchk").on("propertychange change keyup paste input", function() {
+					if($("#pwchk").val() == $("#newpw").val()) {
+						$("#pwchk").attr('class','form-control');
+						$("#newpw").attr('class','form-control');
+						pwCheck = 1;
+					} else {
+						$("#pwchk").attr('class','form-control is-invalid');
+						$("#newpw").attr('class','form-control is-invalid');
+						pwCheck = 0;
+					}
+				});
+			});
+		</script>
+	</th:block>
+	
+</head>
+<body>
+
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-7 col-lg-6 col-xl-5">
+					<div class="login-wrap p-4 p-md-5">
+						<div class="icon d-flex align-items-center justify-content-center">
+							<span class="fa fa-edit"></span>
+						</div>
+						<h2 class="heading-section" style="text-align: center;">비밀번호 변경</h2>
+						<h6 class="text-center mb-4">Password Update</h6>
+						<form action="/pwUpdate" onsubmit="return fn_submit_form()"
+						class="signup-form" method="Post" id="updateForm">
+							<input type="text" class="form-control" id="userid" name="userid"
+							placeholder="ID" readonly hidden required>
+							<div class="form-group mb-3">
+								<label class="label" for="email">Password</label>
+								<input type="text" class="form-control" id="pw"
+								name="pw" th:value="${member.pw}" readonly>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="email">New Password</label>
+								<input type="password" class="form-control" id="newpw"
+								name="newpw" placeholder="Password" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="email">New Password Check</label>
+								<input type="password" class="form-control" id="pwchk"
+								name="pwchk" placeholder="Password" required>
+							</div>
+							<div class="form-group">
+								<button type="submit"
+								class="form-control btn btn-primary rounded submit px-3">
+									수정완료
+								</button>
+							</div>
+						</form>
+						<p>리스트로 <a href="/manage/memberList">돌아가기</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+</body>
+</html>

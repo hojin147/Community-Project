@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>My Post Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../5/minty/bootstrap.css">
+	<link rel="stylesheet" href="../_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="../_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="../_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="../_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../_vendor/prismjs/prism.js" data-manual></script>
+	<script src="../_assets/js/custom.js"></script>
+	<!--
+	<script>
+		var selectedGal = "none";
+		if(getParameterByName("galname") != null || 
+		   getParameterByName("galname") == "none") {
+			selectedGal = getParameterByName("galname");
+			
+			$("#searchType").val(selectedGal).prop("selected", true);
+			$("#searchType").val("none").prop("selected", false);
+		}
+		alert(selectedGal);
+	</script>-->
+
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			var selectedGal = [[${param.galname}]];
+			//alert(selectedGal);
+			//.val(selectedGal).prop("selected", true);
+			//"none"
+			/*
+			if(selectedGal != null || 
+			   selectedGal == "none") {
+				selectedGal = getParameterByName("galname");
+				alert(selectedGal);
+				$("#searchType").val(selectedGal).prop("selected", true);
+				$("#searchType").val("none").prop("selected", false);
+			}*/
+			
+			/*
+			$(window).load(function(){
+				
+			});*/
+		</script>
+	</th:block>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+
+	<br><br>
+	<h3 style="text-align: center;" th:text="|${session.userid}님의 게시물|"></h3>
+	<br><br>
+
+	<!-- 본문 -->
+	<div style="float: left; width: 10%; margin-left: 2%; visibility: hidden;">
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+	</div>
+	<div style="float: right; width: 10%; margin-right: 2%; visibility: hidden;">
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+		광고광고광고광고광고광고광고광고광고광고광고
+	</div>
+
+	<div class="container" style="float: center; width: 70%">
+		<div>
+			<select id="searchType" onchange="if(this.value) location.href='/member/myPostList?galname=' + (this.value)">
+				<option>*갤러리선택*</option>
+				<option value="none">전체 갤러리</option>
+				<option th:each="galname : ${allGalname}" 
+						th:text="${galname}"
+						th:value="${galname}"></option>
+			</select>
+		</div>
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th scope="col">번호</th>
+					<th scope="col">갤러리</th>
+					<th scope="col">제목</th>
+					<th scope="col">작성일</th>
+					<th scope="col">조회</th>
+					<th scope="col">추천</th>
+				</tr>
+			</thead>
+			<tbody style="vertical-align: middle;">
+				<tr class="text-center" th:each="posts : ${myPostList}">
+					<td scope="row">
+						<span th:text="${posts.pno}" />
+					</td>
+					<td>
+						<span th:text="${posts.gallery.galname}" />
+					</td>
+					<td>
+						<a th:href="@{'/gallery/postDetail/' + ${posts.pno} + '/' + ${session.userid}}">
+							<span th:text="${posts.title}" />
+						</a>
+					</td>
+					<td>
+						<span th:text="${#dates.format(posts.postdate, 'yyyy-MM-dd')}"/>
+		            </td>
+					<td>
+						<span th:text="${posts.hit}" />
+					</td>
+					<td>
+						<span th:text="${posts.up}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div>
+			<!-- 페이징 처리 네비게이션 바 -->
+			<div style="margin-right: 50px;">
+				<ul class="pagination">
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{myPostList(page=1, galname=${param.galname})}">
+							<span aria-hidden="true">처음</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{myPostList(page = ${pagination.prevBlock}, galname=${param.galname})}">
+							<span aria-hidden="true">이전</span>
+						</a>
+					</li>
+					<th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+						<li class="page-item" th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+						th:each="pageButton : ${#numbers.sequence(start, end)}">
+							<a class="page-link" th:text=${pageButton} 
+							th:href="@{myPostList(page = ${pageButton}, galname=${param.galname})}"></a>
+						</li>
+					</th:block>
+					<li class="page-item">
+						<a class="page-link" aria-label="Next"
+						th:href="@{myPostList(page = ${pagination.nextBlock}, galname=${param.galname})}">
+							<span aria-hidden="true">다음</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{myPostList(page = ${pagination.totalPageCnt}, galname=${param.galname})}">
+							<span aria-hidden="true">끝</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

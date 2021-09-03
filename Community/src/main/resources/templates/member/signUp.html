@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Sign Up</title>
+	<meta name="viewport" charset="UTF-8"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../css/join-font.css">
+	<link rel="stylesheet" href="../css/join.css">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/joinpopper.js"></script>
+	<script src="../js/joinbootstrap.js"></script>
+	<script src="../js/joinmain.js"></script>
+	<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+	data-cf-beacon='{"rayId":"67ff36bd6adf35df","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2021.8.0","si":10}'>
+	</script>
+
+	<script>
+		let idCheck = 0;
+		let pwCheck = 0;
+		let emailCheck = 0;
+		const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+		let phoneCheck = 0;
+		var uid;
+		
+		//id체크하기
+		function fn_idCheck() {
+			uid = document.getElementById("userid").value;
+			var upw = document.getElementById("pw").value;
+			var uname = document.getElementById("name").value;
+			var uemail = document.getElementById("email").value;
+			var uaddress = document.getElementById("address").value;
+			var uphone = document.getElementById("phone").value;
+			
+			if(uid == '') {
+				alert("ID를 입력해주세요");
+			} else {
+				//컨트롤러로 값 보내기
+				var send = '/idCheck?userid='.concat(uid);
+				send = send.concat('&pw=');
+				send = send.concat(upw);
+				send = send.concat('&name=');
+				send = send.concat(uname);
+				send = send.concat('&email=');
+				send = send.concat(uemail);
+				send = send.concat('&address=');
+				send = send.concat(uaddress);
+				send = send.concat('&phone=');
+				send = send.concat(uphone);
+				
+				window.location.href = send;
+			}
+		}
+		
+		//가입 버튼 누를 때 각 입력값이 이상이 없는지 최종 확인
+		function fn_submit_form() {
+			if($("#pwchk").val() == $("#pw").val()) {
+				$("#pwchk").attr('class','form-control');
+				$("#pw").attr('class','form-control');
+				pwCheck = 1;
+			} else {
+				$("#pwchk").attr('class','form-control is-invalid');
+				$("#pw").attr('class','form-control is-invalid');
+				pwCheck = 0;
+			}
+					
+			var emailVal = $("#email").val();
+			if(emailVal.match(regExp) != null) {
+				$("#email").attr('class','form-control');
+				emailCheck = 1;
+			} else {
+				$("#email").attr('class','form-control is-invalid');
+				emailCheck = 0;
+			}
+			
+			var emailVal = $("#email").val();
+			if(emailVal.match(regExp) != null) {
+				$("#email").attr('class','form-control');
+				emailCheck = 1;
+			} else {
+				$("#email").attr('class','form-control is-invalid');
+				emailCheck = 0;
+			}
+			
+			var phoneVal = $("#phone").val();
+			if(isNaN(phoneVal) || (phoneVal.length > 12) || (phoneVal.length < 9)) {
+				phoneCheck = 0;
+				$("#phone").attr('class','form-control is-invalid');
+			} else {
+				$("#phone").attr('class','form-control');
+				phoneCheck = 1;
+			}
+			
+			if(uid != undefined && $("#userid").val() != uid) {
+				alert("ID 중복 재확인이 필요합니다.");
+				return false;
+			}
+			
+			if(idCheck*pwCheck*emailCheck*phoneCheck != 0) {
+				alert("회원가입 성공");
+				return true;
+			} else {
+				var unchecked = "\n확인이 필요한 항목 : ";
+				if (idCheck == 0) {
+					unchecked += "ID ";
+				}
+				if(pwCheck == 0) {
+					unchecked += "비밀번호 ";
+				}
+				if(phoneCheck == 0) {
+					unchecked += "전화번호 ";
+				}
+				if(emailCheck == 0) {
+					unchecked += "이메일 ";
+				}
+				alert("미확인된 사항 또는 잘못 입력한 사항이 있습니다." + unchecked);
+				return false;
+			}
+		}
+	</script>
+	
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			//id체크 결과값 받아서 알림창
+			$(window).load(function () {
+				var msg = [[${msg}]];
+				if (msg == 'checked') {
+					alert("확인완료. 사용 가능한 아이디 입니다.");
+					idCheck = 1;
+					document.getElementById("userid").value = [[${uid}]];
+					uid = [[${uid}]];
+					var stateObj = {msg: ""};
+				} else if(msg == 'rejected') {
+					alert("사용 불가능한 아이디 입니다.");
+					idCheck = 0;
+					var stateObj = {msg: ""};
+				}
+				
+				//컨트롤러에서 나머지값 받아서 폼에 뿌려주기
+				document.getElementById("pw").value = [[${upw}]]
+				document.getElementById("pwchk").value = [[${upw}]]
+				document.getElementById("name").value = [[${uname}]]
+				document.getElementById("email").value = [[${uemail}]]
+				document.getElementById("address").value = [[${uaddress}]]
+				document.getElementById("phone").value = [[${uphone}]]
+			});
+			
+			//동기확인 기능들
+			$(document).ready(function() {
+				$("#pwchk").on("propertychange change keyup paste input", function() {
+					if($("#pwchk").val() == $("#pw").val()) {
+						$("#pwchk").attr('class','form-control');
+						$("#pw").attr('class','form-control');
+						pwCheck = 1;
+					} else {
+						$("#pwchk").attr('class','form-control is-invalid');
+						$("#pw").attr('class','form-control is-invalid');
+						pwCheck = 0;
+					}
+				});
+				
+				$("#email").on("propertychange change keyup paste input", function() {
+					var emailVal = $("#email").val();
+					
+					if(emailVal.match(regExp) != null) {
+						$("#email").attr('class','form-control');
+						emailCheck = 1;
+					} else {
+						$("#email").attr('class','form-control is-invalid');
+						emailCheck = 0;
+					}
+					
+				});
+				
+				$("#phone").on("propertychange change keyup paste input", function() {
+					var phoneVal = $("#phone").val();
+					
+					if(isNaN(phoneVal) || (phoneVal.length > 12) || (phoneVal.length < 9)) {
+						phoneCheck = 0;
+						$("#phone").attr('class','form-control is-invalid');
+						//"form-control is-invalid"
+					} else {
+						$("#phone").attr('class','form-control');
+						phoneCheck = 1;
+					}
+				});
+			});
+		</script>
+	</th:block>
+	
+</head>
+<body>
+
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-7 col-lg-6 col-xl-5">
+					<div class="login-wrap p-4 p-md-5">
+						<div class="icon d-flex align-items-center justify-content-center">
+							<span class="fa fa-edit"></span>
+						</div>
+						<h2 class="heading-section" style="text-align: center;">
+							회원가입
+						</h2>
+						<h6 class="text-center mb-4">Create Your Account</h6>
+						<form action="/signUp" onsubmit="return fn_submit_form()"
+						class="signup-form" method="POST" id="signUpForm">
+							<div class="form-group mb-3">
+								<label class="label" for="name">ID</label>
+								<input type="text" class="form-control" id="userid"
+								name="userid" placeholder="ID" required>
+							</div>
+							<div class="form-group mb-3">
+								<a onclick="fn_idCheck()" role="button" class="btn btn-light">
+									ID 중복확인
+								</a>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="email">Password</label>
+								<input type="password" class="form-control" id="pw"
+								name="pw" placeholder="Password" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="email">Password Check</label>
+								<input type="password" class="form-control" id="pwchk"
+								name="pwchk" placeholder="Password" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="password">Name</label>
+								<input type="text" class="form-control" id="name"
+								name="name" placeholder="Name" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="password">E-mail</label>
+								<input type="email" class="form-control" id="email"
+								name="email" placeholder="E-mail" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="password">Address</label>
+								<input type="text" class="form-control" id="address"
+								name="address" placeholder="Address" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="password">Phone</label>
+								<input type="text" class="form-control" id="phone"
+								name="phone" placeholder="Phone without -" required>
+							</div>
+							<div class="form-group d-md-flex">
+								<div class="w-100 text-left">
+									<label class="checkbox-wrap checkbox-primary">
+										약관 동의
+										<input type="checkbox" required>
+										<span class="checkmark"></span>
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit"
+								class="form-control btn btn-primary rounded submit px-3">
+									가입하기
+								</button>
+							</div>
+						</form>
+						<p>이미 아이디가 있다면,&nbsp;&nbsp;
+							<a th:href="@{/main/login}">Sign In</a><hr>
+							메인페이지로 <a href="/main/index">돌아가기</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Main Page</title>
+	<link rel="stylesheet" href="../5/minty/bootstrap.css">
+	<link rel="stylesheet" href="../_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="../_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="../_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="../_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../_vendor/prismjs/prism.js" data-manual></script>
+	<script src="../_assets/js/custom.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+	<!-- 본문 푸터랑 배치
+	<style> html,body {height:100%;}</style>
+	본문 div에 height: 75% !important; 추가
+	-->
+
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'UA-23019901-1');
+	</script>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+	
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+	
+	<br><br>
+	
+	<!-- 본문 -->
+	<div style="float: left; width: 9%; margin-left: 2%;">
+		<th:block th:replace="include/sideLeft"></th:block>
+	</div>
+	<div style="float: right; width: 9%; margin-right: 8%;">
+		<th:block th:replace="include/sideRight"></th:block>
+	</div>
+	
+	<div class="container" style="float: center;  width: 65%">
+		<h3 style="text-align: center;">공지사항</h3><br>
+		<table class="table table-hover">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th scope="col">번호</th>
+					<th scope="col">제목</th>
+					<th scope="col">작성일</th>
+					<th scope="col">조회</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-center" th:each="notice,index : ${noticeList}" th:if="${index.index < 5}">
+					<td scope="row">
+						<span th:text="${notice.nno}" />
+					</td>
+					<td>
+						<a th:href="@{'/manage/noticeDetail/' + ${notice.nno} + '/' + ${session.userid}}">
+							<span th:text="${notice.title}" />
+						</a>
+					</td>
+					<td>
+						<span th:text="${#dates.format(notice.postdate, 'yyyy-MM-dd')}"/>
+		            </td>
+					<td>
+						<span th:text="${notice.hit}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<br><br><br>
+		
+		<h3 style="text-align: center;">Best 게시글</h3><br>
+		<table class="table table-hover"
+		style="margin-left: auto; margin-right: auto;">
+			<thead>
+				<tr class="text-center">
+					<th scope="col">번호</th>
+					<th scope="col">갤러리</th>
+					<th scope="col">제목</th>
+					<th scope="col">작성자</th>
+					<th scope="col">작성일</th>
+					<th scope="col">조회</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-center" th:each="best : ${bestList}">
+					<td th:text="${best.pno}">번호</td>
+					<td th:text="${best.gallery.galname}">갤러리</td>
+					<td>
+						<a th:href="@{'/gallery/postDetail/' + ${best.pno} + '/' + ${session.userid}}">
+							<span th:text="${best.title}" />
+						</a>
+					</td>
+					<td th:text="${best.member.userid}">작성자</td>
+					<td th:text="${#dates.format(best.postdate, 'yyyy-MM-dd')}">작성일</td>
+					<th th:text="${best.hit}">조회</th>
+				</tr>
+			</tbody>
+		</table>
+	</div><br><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

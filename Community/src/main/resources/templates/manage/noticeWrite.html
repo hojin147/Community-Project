@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Notice Write Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/5/minty/bootstrap.css">
+	<link rel="stylesheet" href="/_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="/_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="/_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="/_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/_vendor/prismjs/prism.js" data-manual></script>
+	<script src="/_assets/js/custom.js"></script>
+</head>
+
+<body>
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+	<br><br>
+
+	<!-- 본문 -->
+	<div class="h-100">
+
+		<div style="float: left; width: 10%; margin-left: 2%;">
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+		</div>
+		<div style="float: right; width: 10%; margin-right: 2%;">
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+			광고광고광고광고광고광고광고광고광고광고광고
+		</div>
+
+		<!-- 게시판부분 -->
+		<div class="container" style="float: center;  width: 60%;">
+			<h3 style="text-align: center;">공지사항 쓰기</h3>
+			<form method="post" th:action="@{'/insertNotice'}">
+				<div class="form-group row">
+					<!-- 작성 유저 아이디 숨김 -->
+					<input name="userid" th:value="${session.userid}" readonly hidden/>
+
+					<div class="form-group">
+						<label class="col-form-label mt-4" for="title">제목</label>
+						<input type="text" class="form-control" name="title" required>
+					</div>
+
+					<div class="form-group">
+						<label for="content" class="form-label mt-4">내용</label>
+						<textarea class="form-control" name="content" rows="3" required></textarea>
+					</div>
+
+					<div class="form-group" style="margin-top: 10px; text-align: right;">
+						<button type="submit" class="btn btn-primary">글쓰기</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div><br><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>

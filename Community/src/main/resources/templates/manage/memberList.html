@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Member List Page</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../5/minty/bootstrap.css">
+	<link rel="stylesheet" href="../_vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../_vendor/prismjs/themes/prism-okaidia.css">
+	<link rel="stylesheet" href="../_assets/css/custom.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+	<script src="../_vendor/jquery/dist/jquery.min.js"></script>
+	<script src="../_vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../_vendor/prismjs/prism.js" data-manual></script>
+	<script src="../_assets/js/custom.js"></script>
+</head>
+
+<body>
+
+	<!-- 헤더 -->
+	<th:block th:replace="include/header::header"></th:block>
+
+	<!-- 네비 -->
+	<th:block th:replace="include/navbar::navbar"></th:block>
+
+	<br><br>
+	<h3 style="text-align: center;">회원목록</h3>
+	<br><br>
+
+	<div class="container" style="float: center;  width: 80%">
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th scope="col">UserId</th>
+					<th scope="col">Name</th>
+					<th scope="col">Phone</th>
+					<th scope="col">Adress</th>
+					<th scope="col">Email</th>
+					<th scope="col">비밀번호 수정</th>
+					<th scope="col">회원삭제</th>
+				</tr>
+			</thead>
+			<tbody style="text-align: center; vertical-align: middle;">
+				<tr th:each="member : ${memberList}">
+					<td scope="row">
+						<span th:text="${member.userid}"></span>
+					</td>
+					<td>
+						<span th:text="${member.name}"></span>
+					</td>
+					<td>
+						<span th:text="${member.phone}"></span>
+					</td>
+					<td>
+						<span th:text="${member.address}"></span>
+					</td>
+					<td>
+						<span th:text="${member.email}"></span>
+					</td>
+					<td>
+						<form id="update-form" 
+						th:action="@{'/pwUpdate/' + ${member.userid}}">
+							<input type="hidden" name="_method"/>
+			                <button id="update-btn2" type="submit"
+			                class="btn btn-warning" style="width: 70%;">
+			                	비밀번호 수정
+			                </button>
+	           			</form>
+					</td>
+					<td>
+						<form id="delete-form" method="post" 
+						th:action="@{'/memberDelete/' + ${member.userid}}"
+						onsubmit="return confirm('정말 삭제하시겠습니까?');">
+							<input type="hidden" name="_method"/>
+			                <button id="delete-btn2" type="submit"
+			                class="btn btn-danger" style="width: 60%;">
+			                	삭제
+			                </button>
+	           			</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div>
+			<!-- 페이징 처리 네비게이션 바 -->
+			<div style="margin-right: 50px;">
+				<ul class="pagination">
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{memberList(page=1)}">
+							<span aria-hidden="true">처음</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{memberList(page = ${pagination.prevBlock})}">
+							<span aria-hidden="true">이전</span>
+						</a>
+					</li>
+					<th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+						<li class="page-item" th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+						th:each="pageButton : ${#numbers.sequence(start, end)}">
+							<a class="page-link" th:text=${pageButton} 
+							th:href="@{memberList(page = ${pageButton})}"></a>
+						</li>
+					</th:block>
+					<li class="page-item">
+						<a class="page-link" aria-label="Next"
+						th:href="@{memberList(page = ${pagination.nextBlock})}">
+							<span aria-hidden="true">다음</span>
+						</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{memberList(page = ${pagination.totalPageCnt})}">
+							<span aria-hidden="true">끝</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div><br>
+
+	<!-- 푸터 -->
+	<th:block th:replace="include/footer::footer"></th:block>
+
+</body>
+</html>
