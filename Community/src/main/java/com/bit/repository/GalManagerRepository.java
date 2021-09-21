@@ -1,4 +1,4 @@
-package com.bit.persistance;
+package com.bit.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
