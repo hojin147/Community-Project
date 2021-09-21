@@ -1,71 +1,42 @@
-package com.bit;
+package com.bit.repository;
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import javax.transaction.Transactional;
 
-import com.bit.domain.Gallerys;
-import com.bit.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import com.bit.domain.Posts;
-import com.bit.persistance.GallerysRepository;
-import com.bit.persistance.MemberRepository;
-import com.bit.persistance.PostsRepository;
-import com.bit.service.GalleryService;
 
-import lombok.ToString;
-import lombok.extern.java.Log;
+//페이징 처리를 하기 위해 Crud가 아닌 페이징 기능이 들어있는 Jpa를 씀
+@Repository
+public interface PostsRepository extends JpaRepository<Posts, Integer> {
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@Log
-@ToString
-public class GalTest {
-
-	@Autowired
-	GalleryService gServ;
+	//게시글 수정 쿼리문
+	@Modifying
+	@Transactional
+	@Query("UPDATE Posts p set p.title = ?2, p.content = ?3, p.updatedate = now() "
+			+ " where p.pno = ?1")
+	public int updatePosts(int pno, String title, String content);
 	
-	@Autowired
-	MemberRepository mRepo;
+	//조회수 증가 쿼리문
+	@Modifying
+	@Transactional
+	@Query("UPDATE Posts p set p.hit = p.hit+1 where p.pno = ?1")
+	public int postHit(int pno);
 	
+	//추천수 증가(무한 추천으로 미완성임)
+	@Modifying
+	@Transactional
+	@Query("UPDATE Posts p set p.up = p.up+1 where p.pno = ?1")
+	public int postUp(int pno);
 	
-	@Autowired
-	GallerysRepository gRepo;
-	@Autowired
-	PostsRepository pRepo;
-	
-	/*
-	@Test
-	public void sportsGal() {
-		
-		log.info("스포츠 카테고리 갤러리 이름 가져오기"); List<Gallerys> gal =
-		gRepo.findByCategory("스포츠"); for(Gallerys i : gal) { System.out.println(i); }
-		
-		gRepo.findByCategory("스포츠").forEach(Gallerys->System.out.println(Gallerys));
-		
-	}*/
-	
-	@Test
-	public void getPostContentByPno() {
-		//log.info(pRepo.findById(66).toString()); //pno로 게시물 불러오기
-		//제목으로 검색하기
-		/*
-		List<Posts> posts = pRepo.findByTitleContaining("10");
-		log.info(""+posts.size());
-		log.info(posts.toString()); *///제목으로 검색하기
-		//멤버로 검색
-		/*
-		List<Posts> posts = pRepo.findByMemberContaining(mRepo.findByUseridContaining("7"));
-		log.info(""+posts.size());
-		log.info(posts.toString());*/
-		/*
-		List<Member> members = mRepo.findByUseridContaining("7");
-		log.info(""+members.size());*/
-		
-	}
-	
+	//조회수 높은 순으로 게시글 5개 가져오기(베스트 게시글)
+	@Modifying
+	@Transactional
+	@Query(value = "SELECT * FROM Posts p ORDER BY p.hit DESC limit 5 offset 0", nativeQuery = true)
+	public List<Posts> selectByHitDesc();
 }

@@ -1,8 +1,5 @@
 package com.bit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +10,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.bit.domain.Gallerys;
 import com.bit.domain.Member;
 import com.bit.domain.Posts;
-import com.bit.persistance.GallerysRepository;
-import com.bit.persistance.MemberRepository;
-import com.bit.persistance.PostsRepository;
+import com.bit.repository.GallerysRepository;
+import com.bit.repository.MemberRepository;
+import com.bit.repository.PostsRepository;
 import com.bit.service.MemberService;
-
-import lombok.extern.java.Log;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Log @Commit
+@Commit
 public class DBTests {
 	
 	@Autowired
