@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +17,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bit.domain.Gallerys;
 import com.bit.domain.Member;
 import com.bit.domain.Pagination;
-import com.bit.persistance.GallerysRepository;
-import com.bit.persistance.MemberRepository;
+import com.bit.repository.GallerysRepository;
+import com.bit.repository.MemberRepository;
 import com.bit.service.GalleryService;
 import com.bit.service.ManageService;
 import com.bit.service.MemberService;
 import com.bit.vo.GallerysVO;
 import com.bit.vo.MemberVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 //관리자 페이지 관련 호출

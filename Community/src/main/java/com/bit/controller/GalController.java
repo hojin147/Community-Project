@@ -3,7 +3,6 @@ package com.bit.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +11,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.bit.domain.Pagination;
 import com.bit.domain.Posts;
-import com.bit.persistance.PostsRepository;
 import com.bit.service.GalleryService;
-import com.bit.service.PostService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 //유저가 쓰는 페이지 호출

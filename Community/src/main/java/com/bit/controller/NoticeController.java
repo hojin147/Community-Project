@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +21,7 @@ import com.bit.service.GalleryService;
 import com.bit.service.NoticeService;
 import com.bit.vo.NoticeVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 //공지사항 관련

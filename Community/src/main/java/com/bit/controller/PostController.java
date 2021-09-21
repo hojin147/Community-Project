@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +21,7 @@ import com.bit.service.PostService;
 import com.bit.vo.CommentVO;
 import com.bit.vo.PostsVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 //글쓰기 수정 삭제 관련
