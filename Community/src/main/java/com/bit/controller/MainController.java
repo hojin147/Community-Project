@@ -19,16 +19,21 @@ import lombok.extern.java.Log;
 
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class MainController {
 	
-	@Autowired
-	GalleryService gServ;
-	
-	@Autowired
-	NoticeService nServ;
-	
-	@Autowired
-	PostService pServ;
+	private final GalleryService gServ;
+	private final NoticeService nServ;
+	private final PostService pServ;
+
+	//생성자 주입법 예시
+//	@Autowired
+//	public MainController(GalleryService gServ, NoticeService nServ, PostService pServ) {
+//		this.gServ = gServ;
+//		this.nServ = nServ;
+//		this.pServ = pServ;
+//	}
 	
 	//메인 페이지 호출
 	@GetMapping("/main/index")

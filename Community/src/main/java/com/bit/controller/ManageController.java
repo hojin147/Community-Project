@@ -31,21 +31,15 @@ import lombok.extern.java.Log;
 //관리자 페이지 관련 호출
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class ManageController {
 	
-	@Autowired
-	GalleryService gServ;
-	@Autowired
-	GallerysRepository gRepo;
-	
-	@Autowired
-	MemberService mServ;
-	
-	@Autowired
-	MemberRepository mRepo;
-	
-	@Autowired
-	ManageService mgServ;
+	private final GalleryService gServ;
+	private final GallerysRepository gRepo;
+	private final MemberService mServ;
+	private final MemberRepository mRepo;
+	private final ManageService mgServ;
 	
 	//갤러리 관리 리스트 페이지 호출
 	@GetMapping("/manage/galleryList")

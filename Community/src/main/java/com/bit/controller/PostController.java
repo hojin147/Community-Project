@@ -27,16 +27,13 @@ import lombok.extern.java.Log;
 //글쓰기 수정 삭제 관련
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class PostController {
 
-	@Autowired
-	CommentService cServ;
-
-	@Autowired
-	GalleryService gServ;
-
-	@Autowired
-	PostService pServ;
+	private final CommentService cServ;
+	private final GalleryService gServ;
+	private final PostService pServ;
 
 	// 글쓰기 페이지 호출
 	@GetMapping("/gallery/writePost/{galname}")

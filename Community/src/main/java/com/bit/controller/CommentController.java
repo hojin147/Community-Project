@@ -25,13 +25,12 @@ import lombok.extern.java.Log;
 //댓글 관련 컨트롤러
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class CommentController {
 	
-	@Autowired
-	CommentService cServ;
-	
-	@Autowired
-	GalleryService gServ;
+	private final CommentService cServ;
+	private final GalleryService gServ;
 	
 	//댓글쓰기
 	@PostMapping("/commentSub/{pno}")

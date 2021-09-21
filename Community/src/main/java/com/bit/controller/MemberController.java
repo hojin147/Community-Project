@@ -22,10 +22,11 @@ import lombok.extern.java.Log;
 //회원 정보 관련 페이지 호출
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class MemberController {
 
-	@Autowired
-	MemberService mServ;
+	private final MemberService mServ;
 
 	@GetMapping("/member/login")
 	public String loginPage() {

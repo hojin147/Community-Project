@@ -27,13 +27,12 @@ import lombok.extern.java.Log;
 //공지사항 관련
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class NoticeController {
 	
-	@Autowired
-	NoticeService nServ;
-	
-	@Autowired
-	GalleryService gServ;
+	private final NoticeService nServ;
+	private final GalleryService gServ;
 	
 	//공지사항 리스트 페이지 호출
 	@GetMapping("/manage/noticeList")

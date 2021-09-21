@@ -21,16 +21,11 @@ import lombok.extern.java.Log;
 //유저가 쓰는 페이지 호출
 @Controller
 @Log
+//요즘 많이 쓰는 final 주입으로 코드수정
+@RequiredArgsConstructor
 public class GalController {
 	
-	@Autowired
-	GalleryService gServ;
-
-	@Autowired
-	PostService pServ;
-	
-	@Autowired
-	PostsRepository pRepo;
+	private final GalleryService gServ;
 	
 	//로그인한 유저의 게시물 리스트 호출
 	@GetMapping("/member/myPostList")
