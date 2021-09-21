@@ -12,6 +12,7 @@ import com.bit.domain.Comment;
 import com.bit.domain.Posts;
 
 //페이징 처리를 하기 위해 Crud가 아닌 페이징 기능이 들어있는 Jpa를 씀
+@Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 	
 	//해당 댓글 수정

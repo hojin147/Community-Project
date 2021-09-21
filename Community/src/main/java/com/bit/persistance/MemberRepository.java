@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.bit.domain.Member;
 
+@Repository
 public interface MemberRepository extends CrudRepository<Member, String>{
 
 	//로그인을 위한 아이디로 멤버 객체 가져오는 추상메소드

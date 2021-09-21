@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.bit.domain.Notice;
 
 //페이징 처리를 하기 위해 Crud가 아닌 페이징 기능이 들어있는 Jpa를 씀
+@Repository
 public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 
 	//공지 수정 쿼리문

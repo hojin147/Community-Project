@@ -12,6 +12,7 @@ import com.bit.domain.Gallerys;
 import com.bit.domain.Member;
 
 //페이징 처리를 하기 위해 Crud가 아닌 페이징 기능이 들어있는 Jpa를 씀
+@Repository
 public interface GallerysRepository extends JpaRepository<Gallerys, String> {
 
 	//카테고리 중복없이 다 가져오기
