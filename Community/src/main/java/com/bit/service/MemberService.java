@@ -5,12 +5,13 @@ import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bit.domain.Member;
-import com.bit.persistance.MemberRepository;
+import com.bit.repository.MemberRepository;
 import com.bit.vo.MemberVO;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

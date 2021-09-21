@@ -9,14 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bit.domain.Notice;
-import com.bit.persistance.MemberRepository;
-import com.bit.persistance.NoticeRepository;
+import com.bit.repository.MemberRepository;
+import com.bit.repository.NoticeRepository;
 import com.bit.vo.NoticeVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 @Service

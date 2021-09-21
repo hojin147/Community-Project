@@ -6,13 +6,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bit.domain.Gallerys;
 import com.bit.domain.Posts;
-import com.bit.persistance.GallerysRepository;
+import com.bit.repository.GallerysRepository;
 import com.bit.vo.GallerysVO;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

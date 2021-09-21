@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bit.domain.Posts;
-import com.bit.persistance.GallerysRepository;
-import com.bit.persistance.MemberRepository;
-import com.bit.persistance.PostsRepository;
+import com.bit.repository.GallerysRepository;
+import com.bit.repository.MemberRepository;
+import com.bit.repository.PostsRepository;
 import com.bit.vo.PostsVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 //게시물에 대한 로직작성

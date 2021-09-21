@@ -7,15 +7,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bit.domain.Comment;
 import com.bit.domain.Posts;
-import com.bit.persistance.CommentRepository;
-import com.bit.persistance.MemberRepository;
-import com.bit.persistance.PostsRepository;
+import com.bit.repository.CommentRepository;
+import com.bit.repository.MemberRepository;
+import com.bit.repository.PostsRepository;
 import com.bit.vo.CommentVO;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
