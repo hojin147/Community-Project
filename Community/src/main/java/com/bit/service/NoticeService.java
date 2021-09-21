@@ -21,13 +21,18 @@ import lombok.extern.java.Log;
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class NoticeService {
 
-	@Autowired
-	NoticeRepository nRepo;
-	
-	@Autowired
-	MemberRepository mRepo;
+	//final 주입
+	private final NoticeRepository nRepo;
+	private final MemberRepository mRepo;
+
+//	@Autowired
+//	public NoticeService(NoticeRepository nRepo, MemberRepository mRepo) {
+//		this.nRepo = nRepo;
+//		this.mRepo = mRepo;
+//	}
 	
 	//페이징을 위한 선언
     @PersistenceContext

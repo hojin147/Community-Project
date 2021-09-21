@@ -14,12 +14,17 @@ import com.bit.domain.Posts;
 import com.bit.persistance.GallerysRepository;
 import com.bit.vo.GallerysVO;
 
-
 @Service
+@RequiredArgsConstructor
 public class GalleryService {
 
-	@Autowired
-	GallerysRepository gRepo;
+	//final 주입
+	private final GallerysRepository gRepo;
+	
+//	@Autowired
+//	public GalleryService(GallerysRepository gRepo) {
+//		this.gRepo = gRepo;
+//	}
 	
 	//페이징을 위한 선언
     @PersistenceContext

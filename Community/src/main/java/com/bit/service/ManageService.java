@@ -14,10 +14,16 @@ import com.bit.domain.Member;
 import com.bit.persistance.ManageRepository;
 
 @Service
+@RequiredArgsConstructor
 public class ManageService {
 
-	@Autowired
-	ManageRepository mgRepo;
+	//final 주입
+	private final ManageRepository mgRepo;
+
+//	@Autowired
+//	public ManageService(ManageRepository mgRepo) {
+//		this.mgRepo = mgRepo;
+//	}
 	
 	//페이징을 위한 선언
     @PersistenceContext

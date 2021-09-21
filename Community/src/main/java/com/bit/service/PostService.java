@@ -21,22 +21,21 @@ import lombok.extern.java.Log;
 //게시물에 대한 로직작성
 @Service
 @Log
+@RequiredArgsConstructor
 public class PostService {
-
-	@Autowired
-	PostsRepository pRepo;
 	
-	@Autowired
-	MemberRepository mRepo;
+	//final주입, 요즘 유행
+	private final PostsRepository pRepo;
+	private final MemberRepository mRepo;
+	private final GallerysRepository gRepo;
 	
-	@Autowired
-	GallerysRepository gRepo;
-	
-	@Autowired
-	GalleryService gServ;
-	
-	@Autowired
-	PostService pServ;
+	//생성자 주입
+//	@Autowired
+//	public PostService(PostsRepository pRepo, MemberRepository mRepo, GallerysRepository gRepo) {
+//		this.pRepo = pRepo;
+//		this.mRepo = mRepo;
+//		this.gRepo = gRepo;
+//	}
 	
 	/*
 	 * 글쓰는 메소드

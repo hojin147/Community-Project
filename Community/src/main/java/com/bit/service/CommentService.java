@@ -18,16 +18,21 @@ import com.bit.persistance.PostsRepository;
 import com.bit.vo.CommentVO;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 	
-	@Autowired
-	CommentRepository cRepo;
+	//final 주입, 요즘 많이 씀
+	private final CommentRepository cRepo;	
+	private final MemberRepository mRepo;
+	private final PostsRepository pRepo;
 	
-	@Autowired
-	MemberRepository mRepo;
-	
-	@Autowired
-	PostsRepository pRepo;
+//	//생성자 주입 방식 예시
+//	@Autowired
+//	public CommentService(CommentRepository cRepo, MemberRepository mRepo, PostsRepository pRepo) {
+//		this.cRepo = cRepo;
+//		this.mRepo = mRepo;
+//		this.pRepo = pRepo;
+//	}
 	
 	//페이징을 위한 선언
     @PersistenceContext

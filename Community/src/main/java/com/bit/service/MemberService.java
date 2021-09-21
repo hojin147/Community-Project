@@ -13,10 +13,11 @@ import com.bit.persistance.MemberRepository;
 import com.bit.vo.MemberVO;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
 
-	@Autowired
-	MemberRepository mRepo;
+	//final 주입
+	private final MemberRepository mRepo;
 	
 	//페이징을 위한 선언
     @PersistenceContext
