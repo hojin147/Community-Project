@@ -30,6 +30,13 @@ public class GalleryService {
 	//페이징을 위한 선언
     @PersistenceContext
 	private EntityManager em;
+    
+	//선택한 카테고리에 따른 문자 리턴
+	private String typeToColumnName(String type) {
+		if(type.equals("t")) return "title";
+		if(type.equals("u")) return "member_userid";
+		return "content";
+	}
 	
 	//카테고리 가져오기
 	@Transactional
@@ -47,11 +54,23 @@ public class GalleryService {
 	}
 	
 	//해당하는 갤러리의 글 리스트 받아오기
-    @Transactional
+    @SuppressWarnings("unchecked")
+	@Transactional
 	public List<Posts> findListPaging(int startIndex, int pageSize, String galname) {
-		return em.createQuery("select p from Posts p "
+    	/*
+    	return em.createQuery("select p from Posts p "
 							+ "where gallery_galname = '" + galname + "' "
 							+ "order by p.pno DESC", Posts.class)
+		*/
+    	
+    	//ROWNUM을 사용하여 데이터가 많아질수록
+    	//목록 불러오는 것에 대한 속도를 높이기 위해서 사용
+    	
+    	//Rownum 초기화하기
+    	gRepo.setRownum();
+    	return em.createNativeQuery("select \\@ROWNUM \\:= \\@ROWNUM+1, p.* from posts p"
+    							  + " where gallery_galname = '"
+    							  + galname + "' order by pno desc", Posts.class)
 				 .setFirstResult(startIndex)
 				 .setMaxResults(pageSize)
 				 .getResultList();
@@ -60,19 +79,25 @@ public class GalleryService {
     //해당하는 갤러리의 총 게시물의 개수 받아오기
 	@Transactional
 	public int findAllCnt(String galname) {
-		return
-		((Long) em.createQuery
-				("select count(*) from Posts where gallery_galname = '" + galname + "'")
-				  .getSingleResult())
-				  .intValue();
+		return ((Long) em.createQuery
+				("select count(*) from Posts"
+			   + " where gallery_galname = '" + galname + "'")
+						 .getSingleResult())
+						 .intValue();
 	}
 	
 	//로그인한 유저의 글 리스트 받아오기
-    @Transactional
+    @SuppressWarnings("unchecked")
+	@Transactional
 	public List<Posts> findMyListPaging(int startIndex, int pageSize, String userid) {
-		return em.createQuery("select p from Posts p "
-							+ "where member_userid = '" + userid + "' "
-							+ "order by p.pno DESC", Posts.class)
+//		return em.createQuery("select p from Posts p "
+//							+ "where member_userid = '" + userid + "' "
+//							+ "order by p.pno DESC", Posts.class)
+    	//Rownum 초기화하기
+    	gRepo.setRownum();
+		return em.createNativeQuery("select \\@ROWNUM \\:= \\@ROWNUM+1, p.* from Posts p "
+								  + "where member_userid = '" + userid + "' "
+								  + "order by p.pno DESC", Posts.class)
 				 .setFirstResult(startIndex)
 				 .setMaxResults(pageSize)
 				 .getResultList();
@@ -230,11 +255,5 @@ public class GalleryService {
 									+ "AND gallery_galname = '" + galname + "'")
 						 .getSingleResult())
 						 .intValue();
-	}
-	
-	private String typeToColumnName(String type) {
-		if(type.equals("t")) return "title";
-		if(type.equals("u")) return "member_userid";
-		return "content";
 	}
 }

@@ -20,7 +20,7 @@ public interface GallerysRepository extends JpaRepository<Gallerys, String> {
 	//카테고리 중복없이 다 가져오기
 	@Modifying
 	@Transactional
-	@Query("select distinct g.category from Gallerys g")
+	@Query("SELECT distinct g.category FROM Gallerys g")
 	public String[] findAllCategory();
 	
 	//해당하는 카테고리의 갤네임 가져오기
@@ -47,4 +47,10 @@ public interface GallerysRepository extends JpaRepository<Gallerys, String> {
 	@Transactional
 	@Query("DELETE FROM Gallerys g WHERE g.galname = ?1")
 	public int deleteByGalname(String galname);
+	
+	//ROWNUM 초기화
+	@Modifying
+	@Transactional
+	@Query(value = "set @ROWNUM := 0", nativeQuery=true)
+	public void setRownum();
 }
