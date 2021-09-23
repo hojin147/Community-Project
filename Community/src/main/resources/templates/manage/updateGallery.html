@@ -18,13 +18,14 @@
 		<script th:inline="javascript">
 			$(window).load(function () {
 				var msg = [[${msg}]];
-				if(msg == 'nogm') {
+				if(msg == '' || history.state) {
+					return;
+				} else if(msg == 'nogm') {
 					alert('신청인이 검색되지 않습니다. ID를 확인해주세요.');
-					var stateObj = { msg: "" };
 				} else if (msg == 'overlap') {
 					alert('중복된 갤러리명입니다.');
-					var stateObj = { msg: "" };
 				}
+				history.replaceState({}, null, null);
 				
 				if(![[${gal.master?.userid}]]) {//alert("galmaster is undefined");
 					//$("#galmasterip").attr("readonly",false);

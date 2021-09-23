@@ -18,16 +18,16 @@
 		<script th:inline="javascript">
 			$(window).load(function(){
 				var msg = [[${msg}]];
-				if(msg == 'udtfail') {
+				if(msg == '' || history.state) {
+					return;
+				} else if(msg == 'udtfail') {
 					alert('갤러리 수정에 실패했습니다.');
-					var stateObj = { msg: "" };
 				} else if(msg == 'udtsucc') {
 					alert('갤러리를 수정했습니다.');
-					var stateObj = { msg: "" };
 				} else if(msg == 'istsucc') {
 					alert('갤러리를 추가했습니다.');
-					var stateObj = { msg: "" };
 				}
+				history.replaceState({}, null, null);
 			});
 		</script>
 	</th:block>
