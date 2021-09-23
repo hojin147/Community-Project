@@ -26,13 +26,14 @@
 		<script th:inline="javascript">
 			$(window).load(function () {
 				var msg = [[${msg}]];
-				if (msg == 'postadded') {
+				if(msg == '' || history.state) {
+					return;
+				} else if (msg == 'postadded') {
 					alert("게시글 등록 완료");
-					var stateObj = {msg: ""};
 				} else if (msg == 'postdeleted') {
 					alert("게시글 삭제 완료");
-					var stateObj = {msg: ""};
 				}
+				history.replaceState({}, null, null);
 			});
 		</script>
 	</th:block>
