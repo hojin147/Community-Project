@@ -51,6 +51,6 @@ public interface GallerysRepository extends JpaRepository<Gallerys, String> {
 	//ROWNUM 초기화
 	@Modifying
 	@Transactional
-	@Query(value = "set @ROWNUM := 0", nativeQuery=true)
+	@Query(value = "set @ROWNUM \\:= 0", nativeQuery=true)
 	public void setRownum();
 }
